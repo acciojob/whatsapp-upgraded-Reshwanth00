@@ -30,7 +30,7 @@ public class WhatsappService {
 
             }
             if(users.size()>2){
-                int count = whatsappRepository.userGroupMap.size()+1;
+                int count = whatsappRepository.publicGroup.size()+1;
                 group.setName("Group "+ count);
                 group.setNumberOfParticipants(users.size());
                 whatsappRepository.publicGroup.put(group,users);
