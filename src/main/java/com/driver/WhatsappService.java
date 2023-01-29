@@ -54,7 +54,7 @@ public class WhatsappService {
                 senderMessageList.add(message);
                 whatsappRepository.userMessageMap.put(sender,senderMessageList);
                 whatsappRepository.setNumberOfMessages(whatsappRepository.getNumberOfMessages()+1);
-                return whatsappRepository.groupMessageMap.size();
+                return whatsappRepository.groupListMap.size();
             }
             else{
                 throw new Exception("You are not allowed to send message");
