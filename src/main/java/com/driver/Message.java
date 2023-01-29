@@ -32,9 +32,8 @@ public class Message {
         return timestamp;
     }
 
-    public Message(int id, String content, Date timestamp){
+    public Message(String content, Date timestamp){
         setContent(content);
-        setId(id);
         setTimestamp(timestamp);
     }
 }
