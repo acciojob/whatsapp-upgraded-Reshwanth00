@@ -88,6 +88,14 @@ public class WhatsappService {
         }
     }
     public int removeUser(User user) throws Exception {
+        /*
+        If the user is not found in any group, the application will throw an exception.
+        If the user is found in a group and is the admin, the application will throw an exception.
+        If the user is not the admin, the application will remove the user from the group, remove all its messages from
+            all the databases, and update relevant attributes accordingly.
+        If the user is removed successfully, the application will return (the updated number of users in the group + the
+            updated number of messages in the group + the updated number of overall messages across all groups).
+         */
         if(whatsappRepository.everyUserMap.containsKey(user)){
             Group group = whatsappRepository.everyUserMap.get(user);
             if(whatsappRepository.groupListMap.get(group).get(0)!=user){
@@ -99,6 +107,7 @@ public class WhatsappService {
                 }
                 List<User> userGroupList = whatsappRepository.groupListMap.get(group);
                 userGroupList.remove(user);
+                whatsappRepository.everyUserMap.remove(user);
                 whatsappRepository.groupListMap.put(group,userGroupList);
                 whatsappRepository.groupMessageMap.put(group,groupMessageList);
                 whatsappRepository.setNumberOfMessages(whatsappRepository.getNumberOfMessages()-userMessageList.size());
