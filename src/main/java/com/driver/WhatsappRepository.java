@@ -17,6 +17,8 @@ public class WhatsappRepository {
     public Map<Group,Integer> groupIntegerMap = new HashMap<>();
     public Map<User,Integer> userIntegerMap = new HashMap<>();
     public Map<User,Group> everyUserMap = new HashMap<>();
+    public Map<User,List<Message>> userMessageMap = new HashMap<>();
+    public Map<Group,List<Message>> groupMessageMap = new HashMap<>();
     private int numberOfMessages;
 
     public int getNumberOfMessages() {

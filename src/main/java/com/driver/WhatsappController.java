@@ -18,16 +18,15 @@ public class WhatsappController {
         else throw new Exception("User already exists");
     }
     @PostMapping("/add-group")
-    public Group createGroup(List<User> users){
+    public Group createGroup( List<User> users){
         return whatsappService.createGroup(users);
     }
     @PostMapping("/add-message")
     public int createMessage(String content){
         return whatsappService.createMessage(content);
     }
-//
     @PutMapping("/send-message")
-    public int sendMessage(Message message, User sender, Group group) throws Exception{
+    public int sendMessage( Message message,  User sender, Group group) throws Exception{
         try{
             return whatsappService.sendMessage(message,sender,group);
         }

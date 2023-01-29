@@ -1,5 +1,7 @@
 package com.driver;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -35,7 +37,6 @@ public class WhatsappService {
         }
         return group;
     }
-
     public int createMessage(String content) {
         Message message = new Message();
         message.setContent(content);
@@ -43,16 +44,16 @@ public class WhatsappService {
         whatsappRepository.messageMap.put(whatsappRepository.messageMap.size()+1,message);
         return message.getId();
     }
-
     public int sendMessage(Message message, User sender, Group group) throws Exception{
         if(whatsappRepository.groupListMap.containsKey(group)){
             if(whatsappRepository.groupListMap.get(group).indexOf(sender)>-1){
-                int groupCount = whatsappRepository.groupIntegerMap.containsKey(group)?whatsappRepository.groupIntegerMap.get(group):0;
-                whatsappRepository.groupIntegerMap.put(group,groupCount+1);
-                int userCount = whatsappRepository.userIntegerMap.containsKey(sender)?whatsappRepository.userIntegerMap.get(sender):0;
-                whatsappRepository.userIntegerMap.put(sender,userCount);
-                whatsappRepository.setNumberOfMessages(whatsappRepository.getNumberOfMessages()+1);
-                return groupCount +1;
+                List<Message> groupMessageList = whatsappRepository.groupMessageMap.get(group);
+                groupMessageList.add(message);
+                whatsappRepository.groupMessageMap.put(group,groupMessageList);
+                List<Message> senderMessageList = whatsappRepository.userMessageMap.get(sender);
+                senderMessageList.add(message);
+                whatsappRepository.userMessageMap.put(sender,senderMessageList);
+                return groupMessageList.size();
             }
             else{
                 throw new Exception("You are not allowed to send message");
@@ -62,10 +63,17 @@ public class WhatsappService {
             throw new Exception("Group does not exist");
         }
     }
-
     public String changeAdmin(User approver, User user, Group group) throws Exception {
+        /*
+        If the mentioned group does not exist, the application will throw an exception.
+        If the approver is not the current admin of the group, the application will throw an exception.
+        If the user is not a part of the group, the application will throw an exception.
+        If all the conditions are met, it will change the admin of the group to "user" and return "SUCCESS". Note that
+            the admin rights are transferred from the approver to the user in this case.
+
+         */
         if(whatsappRepository.groupListMap.containsKey(group)){
-            if(whatsappRepository.groupListMap.get(group).get(0)!=approver){
+            if(whatsappRepository.groupListMap.get(group).get(0)==approver){
                 if(whatsappRepository.groupListMap.get(group).indexOf(user)>-1){
                     List<User> userList = whatsappRepository.groupListMap.get(group);
                     User temp = userList.get(0);
