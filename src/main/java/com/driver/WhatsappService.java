@@ -1,20 +1,17 @@
 package com.driver;
-
-import org.apache.tomcat.util.buf.UEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 @Service
 public class WhatsappService {
     WhatsappRepository whatsappRepository = new WhatsappRepository();
     public String createUser(String name, String mobile){
-        whatsappRepository.userMap.put(mobile,new User(name,mobile));
+        User user = new User();
+        user.setName(name);
+        user.setMobile(mobile);
+        whatsappRepository.userMap.put(mobile,user);
         return "SUCCESS";
     }
-
     public Group createGroup(List<User> users) {
         Group group = new Group();
         if(users.size()==2){
@@ -27,7 +24,8 @@ public class WhatsappService {
             }
         }
         if(users.size()>2){
-            group.setName("Group "+Integer.toString(whatsappRepository.userGroupMap.size()+1));
+            int count = whatsappRepository.userGroupMap.size()+1;
+            group.setName("Group "+ count);
             group.setNumberOfParticipants(users.size());
             whatsappRepository.userGroupMap.put(group,users.get(0));
             whatsappRepository.groupListMap.put(group,users);
@@ -63,7 +61,6 @@ public class WhatsappService {
         else {
             throw new Exception("Group does not exist");
         }
-
     }
 
     public String changeAdmin(User approver, User user, Group group) throws Exception {
@@ -89,7 +86,6 @@ public class WhatsappService {
             throw new Exception("Group does not exist");
         }
     }
-
     public int removeUser(User user) throws Exception {
         if(whatsappRepository.everyUserMap.containsKey(user)){
             Group group = whatsappRepository.everyUserMap.get(user);
@@ -111,7 +107,6 @@ public class WhatsappService {
         }
         else throw new Exception("User not found");
     }
-
     public String findMessage(Date start, Date end, int k) {
         return "";
     }
