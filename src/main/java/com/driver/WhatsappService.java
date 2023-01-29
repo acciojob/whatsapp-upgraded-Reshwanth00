@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class WhatsappService {
     WhatsappRepository whatsappRepository = new WhatsappRepository();
@@ -96,28 +98,39 @@ public class WhatsappService {
         If the user is removed successfully, the application will return (the updated number of users in the group + the
             updated number of messages in the group + the updated number of overall messages across all groups).
          */
-        if(whatsappRepository.everyUserMap.containsKey(user)){
-            Group group = whatsappRepository.everyUserMap.get(user);
-            if(whatsappRepository.groupListMap.get(group).get(0)!=user){
-                List<Message> userMessageList = whatsappRepository.userMessageMap.get(user);
-                whatsappRepository.userMessageMap.remove(user);
-                List<Message> groupMessageList = whatsappRepository.groupMessageMap.get(group);
-                for(Message message:userMessageList){
-                    groupMessageList.remove(message);
+//        if(whatsappRepository.everyUserMap.containsKey(user)){
+//            Group group = whatsappRepository.everyUserMap.get(user);
+//            if(whatsappRepository.groupListMap.get(group).get(0)!=user){
+//                List<Message> userMessageList = whatsappRepository.userMessageMap.get(user);
+//                whatsappRepository.userMessageMap.remove(user);
+//                List<Message> groupMessageList = whatsappRepository.groupMessageMap.get(group);
+//                for(Message message:userMessageList){
+//                    groupMessageList.remove(message);
+//                }
+//                List<User> userGroupList = whatsappRepository.groupListMap.get(group);
+//                userGroupList.remove(user);
+//                whatsappRepository.everyUserMap.remove(user);
+//                whatsappRepository.groupListMap.put(group,userGroupList);
+//                whatsappRepository.groupMessageMap.put(group,groupMessageList);
+//                whatsappRepository.setNumberOfMessages(whatsappRepository.getNumberOfMessages()-userMessageList.size());
+//                return groupMessageList.size()+userGroupList.size()+ whatsappRepository.getNumberOfMessages();
+//            }
+//            else{
+//                throw new Exception("Cannot remove admin");
+//            }
+//        }
+//        else throw new Exception("User not found");
+        boolean found =false;
+        for(Map.Entry<Group,List<User>> itr : whatsappRepository.groupListMap.entrySet()){
+            if(itr.getValue().indexOf(user)!=-1){
+                found = true;
+                if(itr.getValue().get(0)!=user){
+                    itr.getValue().remove(user);
                 }
-                List<User> userGroupList = whatsappRepository.groupListMap.get(group);
-                userGroupList.remove(user);
-                whatsappRepository.everyUserMap.remove(user);
-                whatsappRepository.groupListMap.put(group,userGroupList);
-                whatsappRepository.groupMessageMap.put(group,groupMessageList);
-                whatsappRepository.setNumberOfMessages(whatsappRepository.getNumberOfMessages()-userMessageList.size());
-                return groupMessageList.size()+userGroupList.size()+ whatsappRepository.getNumberOfMessages();
-            }
-            else{
-                throw new Exception("Cannot remove admin");
+                else throw new Exception("Cannot remove admin");
             }
         }
-        else throw new Exception("User not found");
+        if(found)throw new Exception("User not found");
     }
     public String findMessage(Date start, Date end, int k) {
         return "";
