@@ -14,8 +14,6 @@ public class WhatsappRepository {
     public Map<Group,User> personalGroupMap = new HashMap<>();
     public Map<Integer,Message> messageMap = new HashMap<>();
     public Map<Group, List<User>> groupListMap = new HashMap<>();
-    public Map<Group,Integer> groupIntegerMap = new HashMap<>();
-    public Map<User,Integer> userIntegerMap = new HashMap<>();
     public Map<User,Group> everyUserMap = new HashMap<>();
     public Map<User,List<Message>> userMessageMap = new HashMap<>();
     public Map<Group,List<Message>> groupMessageMap = new HashMap<>();

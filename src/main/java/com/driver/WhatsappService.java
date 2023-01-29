@@ -54,7 +54,7 @@ public class WhatsappService {
                 senderMessageList.add(message);
                 whatsappRepository.userMessageMap.put(sender,senderMessageList);
                 whatsappRepository.setNumberOfMessages(whatsappRepository.getNumberOfMessages()+1);
-                return groupMessageList.size();
+                return whatsappRepository.groupMessageMap.size();
             }
             else{
                 throw new Exception("You are not allowed to send message");
@@ -88,6 +88,39 @@ public class WhatsappService {
         }
     }
     public int removeUser(User user) throws Exception {
+        /*
+        boolean userFound = false;
+        int groupSize = 0;
+        int messageCount = 0;
+        int overallMessageCount = messageList.size();
+        Group groupToRemoveFrom = null;
+        for (Map.Entry<Group, List<User>> entry : groupHashMap.entrySet()) {
+            List<User> groupUsers = entry.getValue();
+            if (groupUsers.contains(user))
+            {
+                userFound = true;
+                groupToRemoveFrom = entry.getKey();
+                if (groupUsers.get(0).equals(user))
+                {
+                    throw new Exception("Cannot remove admin");
+                }
+                groupUsers.remove(user);
+                groupSize = groupUsers.size();
+                break;
+            }
+        }
+        if (!userFound)
+        {
+            throw new Exception("User not found");
+        }
+        if (userMessageList.containsKey(user))
+        {
+            messageCount = userMessageList.get(user).size() - 2;
+            userMessageList.remove(user);
+        }
+        return groupSize + messageCount + overallMessageCount;
+    }
+         */
         if(whatsappRepository.everyUserMap.containsKey(user)){
             Group group = whatsappRepository.everyUserMap.get(user);
             if(whatsappRepository.groupListMap.get(group).get(0)!=user){
