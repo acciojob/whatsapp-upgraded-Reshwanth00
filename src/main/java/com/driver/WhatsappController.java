@@ -27,21 +27,11 @@ public class WhatsappController {
     }
     @PutMapping("/send-message")
     public int sendMessage( Message message,  User sender, Group group) throws Exception{
-        try{
-            return whatsappService.sendMessage(message,sender,group);
-        }
-        catch (Exception e){
-            throw new Exception(e);
-        }
+        return whatsappService.sendMessage(message,sender,group);
     }
     @PutMapping("/change-admin")
     public String changeAdmin(User approver, User user, Group group) throws Exception{
-        try{
-            return whatsappService.changeAdmin(approver, user, group);
-        }
-        catch (Exception e){
-            throw new Exception(e);
-        }
+        return whatsappService.changeAdmin(approver, user, group);
     }
     @DeleteMapping("/remove-user")
     public int removeUser(User user) throws Exception{
