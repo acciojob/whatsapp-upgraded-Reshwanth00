@@ -67,7 +67,7 @@ public class WhatsappService {
     }
     public String changeAdmin(User approver, User user, Group group) throws Exception {
         if(whatsappRepository.allGroups.containsKey(group)){
-            if(whatsappRepository.admins.get(approver)!=group){
+            if(whatsappRepository.admins.get(approver)==group){
                 if(whatsappRepository.allGroups.get(group).indexOf(user)<1)throw new Exception("User is not a participant");
                 else{
                     whatsappRepository.admins.remove(approver);
