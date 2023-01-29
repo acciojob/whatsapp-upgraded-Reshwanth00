@@ -126,11 +126,13 @@ public class WhatsappService {
                 found = true;
                 if(itr.getValue().get(0)!=user){
                     itr.getValue().remove(user);
+                    return 0;
                 }
                 else throw new Exception("Cannot remove admin");
             }
         }
         if(found)throw new Exception("User not found");
+        return 0;
     }
     public String findMessage(Date start, Date end, int k) {
         return "";
