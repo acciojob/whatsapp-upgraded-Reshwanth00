@@ -9,21 +9,13 @@ import java.util.Map;
 
 @Repository
 public class WhatsappRepository {
-    public Map<String, User> userMap = new HashMap<>();
-    public Map<Group,User> userGroupMap = new HashMap<>();
-    public Map<Group,User> personalGroupMap = new HashMap<>();
+    public Map<String ,User> userMap= new HashMap<>();
+    public Map<Group,List<User>> personalGroup = new HashMap<>();
+    public Map<Group,List<User>> publicGroup = new HashMap<>();
+    public Map<User,Group> userGroupMap = new HashMap<>();
+    public Map<User,Group> admins = new HashMap<>();
+    public Map<Group,List<User>> allGroups = new HashMap<>();
     public Map<Integer,Message> messageMap = new HashMap<>();
-    public Map<Group, List<User>> groupListMap = new HashMap<>();
-    public Map<User,Group> everyUserMap = new HashMap<>();
-    public Map<User,List<Message>> userMessageMap = new HashMap<>();
-    public Map<Group,List<Message>> groupMessageMap = new HashMap<>();
-    private int numberOfMessages;
-
-    public int getNumberOfMessages() {
-        return numberOfMessages;
-    }
-
-    public void setNumberOfMessages(int numberOfMessages) {
-        this.numberOfMessages = numberOfMessages;
-    }
+    public Map<User,List<Message>> userMessages = new HashMap<>();
+    public Map<Group,List<Message>> groupMessages = new HashMap<>();
 }

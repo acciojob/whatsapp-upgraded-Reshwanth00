@@ -12,10 +12,8 @@ public class WhatsappController {
 
     @PostMapping("/add-user")
     public String createUser(String name, String mobile) throws Exception {
-        if(!whatsappService.whatsappRepository.userMap.containsKey(mobile)) {
-            return whatsappService.createUser(name,mobile);
-        }
-        else throw new Exception("User already exists");
+        return whatsappService.createUser(name,mobile);
+
     }
     @PostMapping("/add-group")
     public Group createGroup( List<User> users){
