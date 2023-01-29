@@ -53,6 +53,7 @@ public class WhatsappService {
                 List<Message> senderMessageList = whatsappRepository.userMessageMap.get(sender);
                 senderMessageList.add(message);
                 whatsappRepository.userMessageMap.put(sender,senderMessageList);
+                whatsappRepository.setNumberOfMessages(whatsappRepository.getNumberOfMessages()+1);
                 return groupMessageList.size();
             }
             else{
@@ -64,14 +65,6 @@ public class WhatsappService {
         }
     }
     public String changeAdmin(User approver, User user, Group group) throws Exception {
-        /*
-        If the mentioned group does not exist, the application will throw an exception.
-        If the approver is not the current admin of the group, the application will throw an exception.
-        If the user is not a part of the group, the application will throw an exception.
-        If all the conditions are met, it will change the admin of the group to "user" and return "SUCCESS". Note that
-            the admin rights are transferred from the approver to the user in this case.
-
-         */
         if(whatsappRepository.groupListMap.containsKey(group)){
             if(whatsappRepository.groupListMap.get(group).get(0)==approver){
                 if(whatsappRepository.groupListMap.get(group).indexOf(user)>-1){
@@ -95,19 +88,29 @@ public class WhatsappService {
         }
     }
     public int removeUser(User user) throws Exception {
+        /*
+            If the user is not found in any group, the application will throw an exception.
+            If the user is found in a group and is the admin, the application will throw an exception.
+            If the user is not the admin, the application will remove the user from the group, remove all its messages
+                from all the databases, and update relevant attributes accordingly.
+            If the user is removed successfully, the application will return (the updated number of users in the group +
+                the updated number of messages in the group + the updated number of overall messages across all groups).
+         */
         if(whatsappRepository.everyUserMap.containsKey(user)){
             Group group = whatsappRepository.everyUserMap.get(user);
             if(whatsappRepository.groupListMap.get(group).get(0)!=user){
-                int count = whatsappRepository.userIntegerMap.get(user);
-                whatsappRepository.userIntegerMap.remove(user);
-                List<User> userList = whatsappRepository.groupListMap.get(group);
-                userList.remove(user);
-                whatsappRepository.groupListMap.put(group,userList);
-                int groupCount = whatsappRepository.groupIntegerMap.get(group);
-                groupCount-=count;
-                whatsappRepository.groupIntegerMap.put(group,groupCount);
-                whatsappRepository.setNumberOfMessages(whatsappRepository.getNumberOfMessages()-count);
-                return userList.size()+groupCount+ whatsappRepository.getNumberOfMessages();
+                List<Message> userMessageList = whatsappRepository.userMessageMap.get(user);
+                whatsappRepository.userMessageMap.remove(user);
+                List<Message> groupMessageList = whatsappRepository.groupMessageMap.get(group);
+                for(Message message:userMessageList){
+                    groupMessageList.remove(message);
+                }
+                List<User> userGroupList = whatsappRepository.groupListMap.get(group);
+                userGroupList.remove(user);
+                whatsappRepository.groupListMap.put(group,userGroupList);
+                whatsappRepository.groupMessageMap.put(group,groupMessageList);
+                whatsappRepository.setNumberOfMessages(whatsappRepository.getNumberOfMessages()-userMessageList.size());
+                return groupMessageList.size()+userGroupList.size()+ whatsappRepository.getNumberOfMessages();
             }
             else{
                 throw new Exception("Cannot remove admin");
